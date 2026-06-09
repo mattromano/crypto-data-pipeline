@@ -65,6 +65,7 @@ make query            # peek at the daily mart
 
 # Option B — run it orchestrated, with the asset graph + hourly schedule:
 make dagster          # open http://<pi-ip>:3000
+# (port 3000 taken? e.g. by Grafana:  make dagster DAGSTER_PORT=3333)
 ```
 
 No API key needed — `data-api.binance.vision` is a public, key-free,

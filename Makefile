@@ -11,6 +11,10 @@ export PGPASSWORD ?= crypto
 export PGDATABASE ?= crypto
 export DBT_PROFILES_DIR := $(CURDIR)/transform
 
+# Dagster UI port. Defaults to 3000; override if something else owns it
+# (e.g. a Grafana instance): `make dagster DAGSTER_PORT=3333`.
+DAGSTER_PORT ?= 3000
+
 install:         ## venv + deps (needs libpq-dev + build tools for psycopg2)
 	python3 -m venv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
 
@@ -26,7 +30,7 @@ transform:       ## run dbt models only
 run: ingest transform   ## full pipeline, no orchestrator
 
 dagster:         ## launch the Dagster UI (asset graph + schedule)
-	dagster dev -m orchestration.definitions
+	dagster dev -m orchestration.definitions -h 0.0.0.0 -p $(DAGSTER_PORT)
 
 query:           ## peek at the daily mart
 	psql "postgresql://$(PGUSER):$(PGPASSWORD)@$(PGHOST):$(PGPORT)/$(PGDATABASE)" \
