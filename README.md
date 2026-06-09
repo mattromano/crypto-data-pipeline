@@ -115,4 +115,13 @@ scripts/setup_postgres.sh  idempotent sandbox role + database bootstrap
 - **Asset linkage.** The dlt asset key is set to `["binance_raw","klines"]` to
   match dbt's source key so lineage connects in the UI; depending on your
   `dagster-dbt` version you may need a custom `DagsterDbtTranslator` to align it.
+- **32-bit Pi (Bullseye) grpc pin.** `requirements.txt` pins `grpcio==1.59.3`.
+  Newer piwheels `armv7l` wheels are built on Bookworm and need `GLIBCXX_3.4.29`,
+  which Bullseye's libstdc++ lacks — without the pin, Dagster fails to import
+  `grpc`. The dlt + dbt stages (`make run`) don't use grpc and work regardless.
+  Remove the pin on 64-bit / Bookworm.
+- **Python 3.9 + dlt.** Resource args are annotated with `typing.Tuple[...]` and
+  the bare `incremental` class (not the `[...]`-subscripted generics): newer dlt
+  inspects annotations with `issubclass()`, which chokes on PEP 585 builtin
+  generics under Python 3.9.
 ```

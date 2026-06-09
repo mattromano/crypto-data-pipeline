@@ -9,3 +9,11 @@ dbt-postgres>=1.8
 dagster>=1.9
 dagster-dbt>=0.25
 dagster-webserver>=1.9
+
+# grpcio (a dagster dep): pin to a build whose piwheels armv7l wheel links the
+# libstdc++ that Raspbian Bullseye ships (needs GLIBCXX <= 3.4.28). Newer wheels
+# are built on Bookworm and require GLIBCXX_3.4.29, which Bullseye lacks -> grpc
+# ImportError that breaks the Dagster layer (dlt + dbt are unaffected). Drop
+# these two pins on 64-bit / Bookworm or any OS with a newer libstdc++.
+grpcio==1.59.3
+grpcio-health-checking==1.59.3
