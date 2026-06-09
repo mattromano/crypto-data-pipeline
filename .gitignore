@@ -1,0 +1,19 @@
+# dlt
+.dlt/secrets.toml
+~/.dlt/
+
+# dbt
+transform/target/
+transform/dbt_packages/
+transform/logs/
+
+# Dagster
+tmp_dagster_home_*/
+.dagster/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env

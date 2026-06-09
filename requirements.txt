@@ -1,0 +1,11 @@
+# Core stack. Postgres-backed so it runs on 32-bit (armv7l) Raspberry Pi OS,
+# where DuckDB has no build. psycopg2 builds from source against libpq-dev
+# (see `make install` notes in the README).
+dlt[postgres]>=1.5
+dbt-postgres>=1.8
+
+# Orchestration. Install dagster + dagster-dbt together so the resolver pins a
+# compatible pair (their versions are released in lockstep).
+dagster>=1.9
+dagster-dbt>=0.25
+dagster-webserver>=1.9

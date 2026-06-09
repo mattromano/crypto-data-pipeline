@@ -1,0 +1,15 @@
+crypto:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      # Same database dlt writes to. Reads the standard libpq env vars so dbt and
+      # the dlt loader (ingest/config.py) stay in lockstep. Sandbox defaults match
+      # the role created by scripts/setup_postgres.sh.
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ env_var('PGPORT', '5432') | int }}"
+      user: "{{ env_var('PGUSER', 'crypto') }}"
+      password: "{{ env_var('PGPASSWORD', 'crypto') }}"
+      dbname: "{{ env_var('PGDATABASE', 'crypto') }}"
+      schema: analytics
+      threads: 4

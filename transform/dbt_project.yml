@@ -1,0 +1,14 @@
+name: "crypto"
+version: "1.0.0"
+config-version: 2
+
+profile: "crypto"
+
+model-paths: ["models"]
+
+models:
+  crypto:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: binance_raw
+    description: "Raw klines landed by the dlt pipeline."
+    schema: binance_raw
+    tables:
+      - name: klines
