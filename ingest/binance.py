@@ -18,7 +18,7 @@ Swap the source by writing a sibling module:
                 (free key, page + startblock cursor -- most on-brand for EVM work)
 """
 
-from typing import Iterator
+from typing import Iterator, Tuple
 
 import dlt
 from dlt.sources.helpers import requests
@@ -38,7 +38,7 @@ DEFAULT_START_MS = 1_704_067_200_000
 
 @dlt.source(name="binance")
 def binance_source(
-    symbols: tuple[str, ...] = ("BTCUSDT", "ETHUSDT", "SOLUSDT"),
+    symbols: Tuple[str, ...] = ("BTCUSDT", "ETHUSDT", "SOLUSDT"),
     interval: str = "1h",
 ):
     """One source, one resource -> one `klines` table with a `symbol` column."""
@@ -51,9 +51,12 @@ def binance_source(
     primary_key=["symbol", "open_time"],  # dedupe key for the merge
 )
 def klines(
-    symbols: tuple[str, ...] = ("BTCUSDT", "ETHUSDT", "SOLUSDT"),
+    symbols: Tuple[str, ...] = ("BTCUSDT", "ETHUSDT", "SOLUSDT"),
     interval: str = "1h",
-    open_time: dlt.sources.incremental[int] = dlt.sources.incremental(
+    # NB: annotate as the bare `incremental` class, not `incremental[int]`.
+    # dlt detects the cursor from the default value; the subscripted generic
+    # form trips an issubclass() check on Python 3.9 (dlt >= ~1.2).
+    open_time: dlt.sources.incremental = dlt.sources.incremental(
         "open_time", initial_value=DEFAULT_START_MS
     ),
 ) -> Iterator[dict]:
